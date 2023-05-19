@@ -1,3 +1,4 @@
+mod font;
 mod gen;
 
 use crate::pdf::page::Page;
@@ -7,8 +8,8 @@ use crate::traits::IdentifiedObject;
 use crate::types::PageFormat;
 use lopdf::Document;
 
-/// The MuPdf manager
-pub struct MuPdf {
+/// The Fude manager
+pub struct Fude {
     /// The document in creation
     pub inner_doc: Document,
 
@@ -19,7 +20,7 @@ pub struct MuPdf {
     pub central_library: Resources,
 }
 
-impl MuPdf {
+impl Fude {
     /// Creates a blank default document
     pub fn new() -> Self {
         let mut inner_doc = Document::with_version("2.0");
@@ -56,7 +57,7 @@ impl MuPdf {
     }
 }
 
-impl Default for MuPdf {
+impl Default for Fude {
     fn default() -> Self {
         Self::new()
     }

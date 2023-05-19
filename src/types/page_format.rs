@@ -1,6 +1,6 @@
 use crate::traits::ObjectExport;
 use crate::types::distance::Distance;
-use lopdf::{Object, ObjectId};
+use lopdf::Object;
 
 /// A page format
 #[derive(Clone)]

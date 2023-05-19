@@ -1,13 +1,16 @@
-use crate::mupdf::MuPdf;
+use crate::fude::Fude;
 use crate::traits::{IdentifiedObject, PdfIntegrate};
 
-impl MuPdf {
+impl Fude {
     /// Generates the document
+    ///
+    /// This function should never alter the current document
     pub fn gen(&self, path: &str) -> bool {
         let mut out_doc = self.inner_doc.clone();
 
         // Integrate all objects into document
         self.root.integrate_into_document(&mut out_doc);
+        self.central_library.integrate_into_document(&mut out_doc);
 
         // Create trailer
         out_doc.trailer.set("Root", self.root.to_object_id());

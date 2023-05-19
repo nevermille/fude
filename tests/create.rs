@@ -1,10 +1,19 @@
-use mudpf::mupdf::MuPdf;
-use mudpf::types::PageFormat;
+use fude::types::PageFormat;
+use fude::Fude;
 
 #[test]
 fn create_one_page_blank_document() {
-    let mut mupdf = MuPdf::new();
+    let mut fude = Fude::new();
 
-    assert_eq!(mupdf.add_new_page(&PageFormat::A4Portrait), 1);
-    assert!(mupdf.gen("/Users/camillebernard/Desktop/blank_test.pdf"));
+    assert_eq!(fude.add_new_page(&PageFormat::A4Portrait), 1);
+    assert!(fude.gen("/Users/camillebernard/Desktop/blank_test.pdf"));
+}
+
+#[test]
+fn create_multiple_pages_blank_document() {
+    let mut fude = Fude::new();
+
+    assert_eq!(fude.add_new_page(&PageFormat::A4Portrait), 1);
+    assert_eq!(fude.add_new_page(&PageFormat::A4Landscape), 2);
+    assert!(fude.gen("/Users/camillebernard/Desktop/blank_multiple_test.pdf"));
 }

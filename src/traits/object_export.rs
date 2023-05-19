@@ -1,4 +1,4 @@
-use lopdf::{Object, ObjectId};
+use lopdf::Object;
 
 /// Makes the structure able to convert into an object
 pub trait ObjectExport {

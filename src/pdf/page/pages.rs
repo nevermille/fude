@@ -1,3 +1,4 @@
+use crate::macros::log::info;
 use crate::pdf::page::Page;
 use crate::traits::{IdentifiedObject, ObjectExport, PdfIntegrate};
 use lopdf::Object::Dictionary;
@@ -29,6 +30,7 @@ impl ObjectExport for Pages {
 
 impl PdfIntegrate for Pages {
     fn integrate_into_document(&self, document: &mut Document) {
+        info!("Document <- Pages ({} {} R)", self.id.0, self.id.1);
         document.objects.insert(self.id, self.to_object());
 
         for page in &self.kids {
