@@ -106,6 +106,11 @@ impl FontDescriptor {
             self.cap_height = v.capital_height().unwrap_or_default() as f32;
         }
 
+        // Basic OTF detection, maybe there's a better solution
+        if font_path.contains(".otf") {
+            self.subsubtype = Some(FontSubsubtype::OpenType);
+        }
+
         info!("Font info extracted with success");
     }
 }
@@ -147,7 +152,8 @@ impl ObjectExport for FontDescriptor {
             "Ascent" => self.ascent,
             "Descent" => self.descent,
             "CapHeight" => self.cap_height,
-            "StemV" => self.stem_v
+            "StemV" => self.stem_v,
+            "Flags" => 0
         };
 
         let mut font_bbox = Vec::new();
@@ -156,7 +162,12 @@ impl ObjectExport for FontDescriptor {
         }
 
         base_dic.set("FontBBox", Object::Array(font_bbox));
-        base_dic.set("FontFile2", Object::Reference(self.font_file));
+
+        if self.subsubtype.is_some() {
+            base_dic.set("FontFile3", Object::Reference(self.font_file));
+        } else {
+            base_dic.set("FontFile2", Object::Reference(self.font_file));
+        }
 
         Dictionary(base_dic)
     }

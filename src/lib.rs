@@ -8,4 +8,4 @@ pub mod pdf;
 pub mod traits;
 pub mod types;
 
-pub use fude::Fude;
+pub use crate::fude::Fude;

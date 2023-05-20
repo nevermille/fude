@@ -28,9 +28,6 @@ pub struct Font {
     /// The type of font
     pub subtype: FontSubtype,
 
-    /// The PostScript language name of the font.
-    pub base_font: String,
-
     /// A font descriptor describing the font’s metrics other than its glyph widths
     pub font_descriptor: FontDescriptor,
 
@@ -141,7 +138,6 @@ impl IdentifiedObject for Font {
         Self {
             id: document.new_object_id(),
             subtype: FontSubtype::Type1,
-            base_font: String::new(),
             font_descriptor: FontDescriptor::from_document(document),
             file: String::new(),
             associated_text: String::new(),
@@ -171,11 +167,16 @@ impl PdfIntegrate for Font {
         self.font_descriptor.integrate_into_document(document);
         document.objects.insert(self.id, self.to_object());
 
+        // Embed font
         let subsetted_font = self.subset();
-        let font_stream = Stream::new(
-            dictionary! {"Length1" => subsetted_font.len() as i64},
-            subsetted_font,
-        );
+        let mut font_dic = dictionary! {"Length1" => subsetted_font.len() as i64};
+
+        if let Some(v) = &self.font_descriptor.subsubtype {
+            font_dic.set("Subtype", v.to_object());
+        }
+
+        let mut font_stream = Stream::new(font_dic, subsetted_font);
+        font_stream.allows_compression = false;
 
         document
             .objects
